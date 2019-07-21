@@ -1,0 +1,52 @@
+# web.yml
+---
+- hosts: pc
+  user: jackiechan
+  become_method: sudo
+  become_user: root
+  vars:
+          name_db: some_db
+
+  tasks:
+    - name: create some user
+      become: yes
+      become_user: root
+      user:
+        name: james
+        shell: /bin/bash
+        groups: adm,sudo
+        append: yes
+    
+    - name: create dir in user-home dir
+      become: yes
+      become_user: james
+      file:
+        path: /home/james/data
+        state: directory
+        mode: 0744
+        owner: james
+        group: james
+
+    - name: Install postgresql
+      become: yes
+      become_user: root
+      apt: name={{ item }}
+      with_items:
+        - postgresql
+        - postgresql-contrib
+        - python3-psycopg2
+
+    - name: create db
+      become: yes
+      become_user: postgres
+      postgresql_db:
+        name: name_db
+        
+    - name: GRANT ALL PRIVILEGES ON DATABASE library TO librarian
+      become: yes
+      become_user: postgres
+      postgresql_privs:
+        db: name_db
+        privs: ALL
+        type: database
+        role: james
