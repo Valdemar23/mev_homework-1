@@ -42,7 +42,7 @@
       postgresql_db:
         name: name_db
         
-    - name: GRANT ALL PRIVILEGES ON DATABASE library TO librarian
+    - name: GRANT ALL PRIVILEGES ON DATABASE name_db TO james
       become: yes
       become_user: postgres
       postgresql_privs:
