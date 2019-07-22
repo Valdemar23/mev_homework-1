@@ -5,27 +5,40 @@
   become_method: sudo
   become_user: root
   vars:
-          name_db: some_db
+          user_var: "{{ user }}"
+          name_db: "{{ db_name }}"
 
+root@HP-Pavilion-15:/etc/ansible# cat web.yml 
+# web.yml
+---
+- hosts: pc
+  user: jackiechan
+  become_method: sudo
+  become_user: root
+  vars:
+          user_var: "{{ user }}"
+          name_db: "{{ db_name }}"
+
+#https://docs.ansible.com/ansible/latest/modules/user_module.html
   tasks:
     - name: create some user
       become: yes
       become_user: root
       user:
-        name: james
+        name: "{{ user_var }}"
         shell: /bin/bash
         groups: adm,sudo
         append: yes
     
     - name: create dir in user-home dir
       become: yes
-      become_user: james
+      become_user: "{{ user_var }}"
       file:
-        path: /home/james/data
+        path: "/home/{{ user_var }}/data"
         state: directory
         mode: 0744
-        owner: james
-        group: james
+        owner: "{{ user_var }}"
+        group: "{{ user_var }}"
 
     - name: Install postgresql
       become: yes
@@ -36,17 +49,19 @@
         - postgresql-contrib
         - python3-psycopg2
 
+#https://docs.ansible.com/ansible/latest/modules/postgresql_db_module.html
     - name: create db
       become: yes
       become_user: postgres
       postgresql_db:
-        name: name_db
+        name: "{{ name_db }}"
         
-    - name: GRANT ALL PRIVILEGES ON DATABASE name_db TO james
+#https://docs.ansible.com/ansible/latest/modules/postgresql_privs_module.html        
+    - name: GRANT ALL PRIVILEGES ON DATABASE "{{ name_db }}" TO "{{ user_var }}"
       become: yes
       become_user: postgres
       postgresql_privs:
-        db: name_db
+        db: "{{ name_db }}"
         privs: ALL
         type: database
-        role: james
+        role: "{{ user_var }}"
