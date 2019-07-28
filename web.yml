@@ -8,17 +8,6 @@
           user_var: "{{ user }}"
           name_db: "{{ db_name }}"
 
-root@HP-Pavilion-15:/etc/ansible# cat web.yml 
-# web.yml
----
-- hosts: pc
-  user: jackiechan
-  become_method: sudo
-  become_user: root
-  vars:
-          user_var: "{{ user }}"
-          name_db: "{{ db_name }}"
-
 #https://docs.ansible.com/ansible/latest/modules/user_module.html
   tasks:
     - name: create some user
