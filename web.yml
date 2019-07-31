@@ -1,7 +1,7 @@
 # web.yml
 ---
-- hosts: pc
-  user: jackiechan
+- hosts: localhost
+  user: ubuntu
   become_method: sudo
   become_user: root
   vars:
