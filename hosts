@@ -22,6 +22,8 @@
 [localhost]
 localhost ansible_connection=local ansible_python_interpreter=/usr/bin/python3
 
+[aws-instances]
+3.16.68.197 ansible_ssh_user=ubuntu ansible_python_interpreter=/usr/bin/python3
 ## [webservers]
 ## alpha.example.org
 ## beta.example.org
@@ -46,4 +48,3 @@ localhost ansible_connection=local ansible_python_interpreter=/usr/bin/python3
 # leading 0s:
 
 ## db-[99:101]-node.example.com
-
